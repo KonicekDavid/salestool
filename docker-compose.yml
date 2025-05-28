@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  php-app:
+    build: .
+    container_name: php-app
+    networks:
+      - salestool-network
+    volumes:
+      - .:/var/www/salestool
+
+  nginx-server:
+    image: nginx:latest
+    container_name: nginx-server
+    networks:
+      - salestool-network
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/salestool/
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php-app
+
+networks:
+  salestool-network:
+    driver: bridge
