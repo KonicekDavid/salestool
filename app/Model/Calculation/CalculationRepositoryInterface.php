@@ -9,7 +9,7 @@ namespace App\Model;
 
 use Dibi\Result;
 
-interface OfferRepositoryInterface
+interface CalculationRepositoryInterface
 {
 
     /**
@@ -17,5 +17,5 @@ interface OfferRepositoryInterface
      * @param int $offset
      * @return Result
      */
-    public function getList(int $limit = 10, int $offset = 0): Result;
+    public function getList(int $limit = 10, int $offset = 0): array;
 }

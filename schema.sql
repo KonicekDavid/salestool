@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS offer (
+CREATE TABLE IF NOT EXISTS calculation (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     customer_name TEXT NOT NULL,
     tariff_name TEXT NOT NULL,
@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS offer (
     last_update DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_offer_created_at ON offer(created_at);
+CREATE INDEX IF NOT EXISTS idx_calculation_created_at ON calculation(created_at);
 
 CREATE TRIGGER IF NOT EXISTS set_last_update
-AFTER UPDATE ON offer
+AFTER UPDATE ON calculation
 FOR EACH ROW
     WHEN NEW.last_update = OLD.last_update
 BEGIN
-    UPDATE offer SET last_update = CURRENT_TIMESTAMP WHERE id = NEW.id;
+    UPDATE calculation SET last_update = CURRENT_TIMESTAMP WHERE id = NEW.id;
 END;

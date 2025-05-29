@@ -24,7 +24,7 @@ final class RouterFactory
         $router = new RouteList;
 
         $apiModule = new RouteList('Api');
-        $apiModule[] = new ApiRoute('/api/offers[/<id>]', 'Offer', [
+        $apiModule[] = new ApiRoute('/api/calculations[/<id>]', 'Calculation', [
             'methods' => [
                 'GET'  => 'default',
                 'POST' => 'default',

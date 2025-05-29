@@ -10,19 +10,19 @@ namespace App\Model;
 /**
  *
  */
-class OfferFacade implements OfferFacadeInterface
+class CalculationFacade implements CalculationFacadeInterface
 {
     /**
-     * @var OfferRepositoryInterface
+     * @var CalculationRepositoryInterface
      */
-    private OfferRepositoryInterface $offerRepository;
+    private CalculationRepositoryInterface $calculationRepository;
 
     /**
-     * @param OfferRepositoryInterface $offerRepository
+     * @param CalculationRepositoryInterface $calculationRepository
      */
-    public function __construct(OfferRepositoryInterface $offerRepository)
+    public function __construct(CalculationRepositoryInterface $calculationRepository)
     {
-        $this->offerRepository = $offerRepository;
+        $this->calculationRepository = $calculationRepository;
     }
 
     /**
@@ -30,7 +30,7 @@ class OfferFacade implements OfferFacadeInterface
      */
     public function getList(int $limit = 10, int $offset = 0): array
     {
-        $result = $this->offerRepository->getList($limit, $offset);
+        $result = $this->calculationRepository->getList($limit, $offset);
         $data = [];
         foreach ($result as $offer) {
             $data[] = [
