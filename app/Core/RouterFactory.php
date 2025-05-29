@@ -9,10 +9,16 @@ use Nette;
 use Nette\Application\Routers\RouteList;
 
 
+/**
+ * RouterFactory
+ */
 final class RouterFactory
 {
     use Nette\StaticClass;
 
+    /**
+     * @return RouteList
+     */
     public static function createRouter(): RouteList
     {
         $router = new RouteList;
@@ -23,7 +29,7 @@ final class RouterFactory
                 'GET'  => 'default',
                 'POST' => 'default',
                 'PUT'  => 'default'
-            ],
+            ]
         ]);
 
         $router[] = $apiModule;

@@ -25,6 +25,7 @@ final class Error5xxPresenter implements Nette\Application\IPresenter
 
 	public function run(Nette\Application\Request $request): Nette\Application\Response
 	{
+        die('500');
 		// Log the exception
 		$exception = $request->getParameter('exception');
 		$this->logger->log($exception, ILogger::EXCEPTION);
