@@ -5,54 +5,115 @@ declare(strict_types=1);
  * @author David Koníček
  */
 
-namespace App\Model;
+namespace App\Model\Calculation;
 
 use Dibi\Connection;
 use Dibi\Result;
-use Dibi\Row;
 
 /**
  *
  */
 class CalculationRepository implements CalculationRepositoryInterface
 {
-    /**
-     * @var Connection
-     */
-    private Connection $connection;
+
+    public const LIMIT = 10;
+
+    public const MAX_LIMIT = 100;
+
+    public const OFFSET = 0;
 
     /**
      * @param Connection $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
+    }
+
+    /**
+     * @param Calculation $calculation
+     * @return Calculation
+     * @throws \Dibi\Exception
+     */
+    public function insert(Calculation $calculation): Calculation
+    {
+        $this->connection->query("INSERT INTO calculation", [
+            'customer_name' => $calculation->getCustomerName(),
+            'tariff_name'   => $calculation->getTariffName(),
+            'price'         => $calculation->getPrice(),
+            'currency'      => $calculation->getCurrency(),
+            'status'        => $calculation->getStatus()
+        ]);
+        $id = $this->connection->getInsertId();
+        return $this->getById($id);
+    }
+
+    /**
+     * @param Calculation $calculation
+     * @return Calculation
+     * @throws \Dibi\Exception
+     * @throws \RuntimeException
+     */
+    public function update(Calculation $calculation): Calculation
+    {
+        $this->connection->query(
+            "UPDATE calculation",
+            ['status' => $calculation->getStatus()],
+            'WHERE id = ?',
+            $calculation->getId()
+        );
+        if ($this->connection->getAffectedRows()) {
+            return $this->getById($calculation->getId());
+        }
+        throw new \RuntimeException('Unable to update calculation.');
+    }
+
+    /**
+     * @param int $id
+     * @return Calculation|null
+     * @throws \Dibi\Exception
+     */
+    public function getById(int $id): ?Calculation
+    {
+        $row = $this->connection->fetch("SELECT * FROM calculation WHERE id = ?", $id);
+        if (!$row) {
+            return null;
+        }
+        $calculation = new Calculation();
+        $calculation->map($row);
+        return $calculation;
     }
 
     /**
      * @param int $limit
      * @param int $offset
-     * @return Result
+     * @return Calculation[]
      * @throws \Dibi\Exception
      */
-    public function getList(int $limit = 10, int $offset = 0): array
+    public function getList(int $limit, int $offset): array
     {
-        if ($limit > 100) {
-            $limit = 100;
+        if ($limit > self::MAX_LIMIT) {
+            $limit = self::LIMIT;
         }
-        $sql = 'SELECT * FROM calculation ORDER BY created_at DESC LIMIT ? OFFSET ?';
-        $rows = $this->connection->query($sql, $limit, $offset);
-        return array_map(fn($row) => $this->mapRowToOffer($row), $rows);
-    }
 
-    private function mapRowToOffer(array|\Dibi\Row $row): Calculation
-    {
-        return new Calculation(
-            (int)$row['id'],
-            $row['customer_name'],
-            $row['tariff_name'],
-            (float)$row['price'],
-            $row['currency']
-        );
+        if ($limit < 1) {
+            $limit = self::LIMIT;
+        }
+
+        if ($offset < 0) {
+            $offset = self::OFFSET;
+        }
+        $sql = <<<SQL
+SELECT *
+FROM calculation 
+ORDER BY created_at DESC 
+LIMIT ?
+OFFSET ?
+SQL;
+        $rows = $this->connection->fetchAll($sql, $limit, $offset);
+        return array_map(function ($row) {
+            $calculation = new Calculation();
+            $calculation->map($row);
+            return $calculation;
+        }, $rows);
     }
 }

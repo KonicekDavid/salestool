@@ -4,15 +4,13 @@ declare(strict_types=1);
  * @author David Koníček
  */
 
-namespace App\Model;
+namespace App\Model\Calculation;
 
 interface CalculationFacadeInterface
 {
+    public function create(array $data): Calculation;
 
-    /**
-     * @param int $limit
-     * @param int $offset
-     * @return array
-     */
-    public function getList(int $limit = 10, int $offset = 0): array;
+    public function update(Calculation $calculation, array $data): Calculation;
+
+    public function getList(int $limit, int $offset): array;
 }
