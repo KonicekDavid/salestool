@@ -9,6 +9,8 @@ namespace App\Model\Calculation;
 
 use Dibi\Connection;
 use Dibi\Result;
+use Dibi\Row;
+use Dibi\Type;
 
 /**
  *
@@ -34,7 +36,7 @@ class CalculationRepository implements CalculationRepositoryInterface
      * @return Calculation
      * @throws \Dibi\Exception
      */
-    public function insert(Calculation $calculation): Calculation
+    public function insert(Calculation $calculation): ?Calculation
     {
         $this->connection->query("INSERT INTO calculation", [
             'customer_name' => $calculation->getCustomerName(),
@@ -53,10 +55,10 @@ class CalculationRepository implements CalculationRepositoryInterface
      * @throws \Dibi\Exception
      * @throws \RuntimeException
      */
-    public function update(Calculation $calculation): Calculation
+    public function update(Calculation $calculation): ?Calculation
     {
         $this->connection->query(
-            "UPDATE calculation",
+            "UPDATE calculation SET",
             ['status' => $calculation->getStatus()],
             'WHERE id = ?',
             $calculation->getId()
@@ -79,7 +81,7 @@ class CalculationRepository implements CalculationRepositoryInterface
             return null;
         }
         $calculation = new Calculation();
-        $calculation->map($row);
+        $calculation->map($row->toArray());
         return $calculation;
     }
 
@@ -110,10 +112,13 @@ LIMIT ?
 OFFSET ?
 SQL;
         $rows = $this->connection->fetchAll($sql, $limit, $offset);
-        return array_map(function ($row) {
+        $results = [];
+        /** @var Row $row */
+        foreach ($rows as $row) {
             $calculation = new Calculation();
-            $calculation->map($row);
-            return $calculation;
-        }, $rows);
+            $calculation->map($row->toArray());
+            $results[] = $calculation;
+        }
+        return $results;
     }
 }

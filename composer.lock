@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea5d54334a14ba77e3d4efd075784f4b",
+    "content-hash": "7197e75123c26fdb3c4a23c52a5b681b",
     "packages": [
         {
             "name": "contributte/api-router",

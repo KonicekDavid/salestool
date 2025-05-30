@@ -12,9 +12,9 @@ use Dibi\Result;
 interface CalculationRepositoryInterface
 {
 
-    public function insert(Calculation $calculation): Calculation;
+    public function insert(Calculation $calculation): ?Calculation;
 
-    public function update(Calculation $calculation): Calculation;
+    public function update(Calculation $calculation): ?Calculation;
 
     public function getById(int $id): ?Calculation;
 

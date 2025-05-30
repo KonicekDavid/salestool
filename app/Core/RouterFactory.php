@@ -21,19 +21,16 @@ final class RouterFactory
      */
     public static function createRouter(): RouteList
     {
-        $router = new RouteList;
-
-        $apiModule = new RouteList('Api');
-        $apiModule[] = new ApiRoute('/api/calculations[/<id>]', 'Calculation', [
+        $router = new RouteList('Api');
+        $route = new ApiRoute('/api/v1/calculations[/<id>]', 'Calculation', [
             'methods' => [
-                'GET'  => 'default',
-                'POST' => 'default',
-                'PUT'  => 'default'
+                'GET'  => 'read',
+                'POST' => 'create',
+                'PUT'  => 'update'
             ]
         ]);
-
-        $router[] = $apiModule;
-
+        $route->setAutoBasePath(false);
+        $router[] = $route;
         return $router;
     }
 }
