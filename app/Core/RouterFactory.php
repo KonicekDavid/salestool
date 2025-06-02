@@ -8,7 +8,6 @@ use Contributte\ApiRouter\ApiRoute;
 use Nette;
 use Nette\Application\Routers\RouteList;
 
-
 /**
  * RouterFactory
  */

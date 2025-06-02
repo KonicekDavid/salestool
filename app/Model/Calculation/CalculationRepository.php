@@ -1,23 +1,14 @@
 <?php
 
 declare(strict_types=1);
-/**
- * @author David Koníček
- */
 
 namespace App\Model\Calculation;
 
 use Dibi\Connection;
-use Dibi\Result;
 use Dibi\Row;
-use Dibi\Type;
 
-/**
- *
- */
 class CalculationRepository implements CalculationRepositoryInterface
 {
-
     public const LIMIT = 10;
 
     public const MAX_LIMIT = 100;

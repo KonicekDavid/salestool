@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * @author David Koníček
- */
 
 namespace App\Presentation\Api;
 
@@ -20,7 +17,7 @@ use Nette\Http\IResponse;
 use Nette\Http\Response;
 use Tracy\Debugger;
 
-class CalculationPresenter extends Presenter
+final class CalculationPresenter extends Presenter
 {
     #[Inject]
     public CalculationFacadeInterface $calculationFacade;
