@@ -20,9 +20,9 @@ interface CalculationFacadeInterface
     public function update(Calculation $calculation, CalculationSchema $data): ?Calculation;
 
     /**
+     * @param int $page
      * @param int $limit
-     * @param int $offset
      * @return array<mixed>
      */
-    public function getList(int $limit, int $offset): array;
+    public function getList(int $page, int $limit): array;
 }

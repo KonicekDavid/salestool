@@ -10,6 +10,8 @@ interface CalculationRepositoryInterface
 
     public function update(Calculation $calculation): ?Calculation;
 
+    public function getTotalCount(): int;
+
     public function getById(int $id): ?Calculation;
 
     /**

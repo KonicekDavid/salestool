@@ -6,9 +6,12 @@ namespace App\Model\Calculation;
 
 use Dibi\Connection;
 use Dibi\Row;
+use http\Exception\InvalidArgumentException;
 
 class CalculationRepository implements CalculationRepositoryInterface
 {
+    const PAGE = 1;
+
     public const LIMIT = 10;
 
     public const MAX_LIMIT = 100;
@@ -77,6 +80,19 @@ class CalculationRepository implements CalculationRepositoryInterface
     }
 
     /**
+     * @return int
+     * @throws \Dibi\Exception
+     */
+    public function getTotalCount(): int
+    {
+        $result = $this->connection->fetch('SELECT count(*) as "count" FROM calculation');
+        if ($result) {
+            return is_int($result["count"]) ? $result["count"] : 0;
+        }
+        throw new \RuntimeException('Unable to get total count.');
+    }
+
+    /**
      * @param int $limit
      * @param int $offset
      * @return Calculation[]
@@ -84,11 +100,7 @@ class CalculationRepository implements CalculationRepositoryInterface
      */
     public function getList(int $limit, int $offset): array
     {
-        if ($limit > self::MAX_LIMIT) {
-            $limit = self::LIMIT;
-        }
-
-        if ($limit < 1) {
+        if ($limit > self::MAX_LIMIT || $limit < 1) {
             $limit = self::LIMIT;
         }
 

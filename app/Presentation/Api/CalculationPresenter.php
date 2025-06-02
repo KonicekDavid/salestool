@@ -17,19 +17,35 @@ use Nette\Http\IResponse;
 use Nette\Http\Response;
 use Tracy\Debugger;
 
+/**
+ * CalculationPresenter
+ */
 final class CalculationPresenter extends Presenter
 {
+    /**
+     * @var CalculationFacadeInterface
+     */
     #[Inject]
     public CalculationFacadeInterface $calculationFacade;
 
+    /**
+     * @var CalculationRepositoryInterface
+     */
     #[Inject]
     public CalculationRepositoryInterface $calculationRepository;
 
+    /**
+     * @return void
+     */
     public function startup(): void
     {
         parent::startup();
     }
 
+    /**
+     * @param int|null $id
+     * @return void
+     */
     #[Requires(methods: 'GET', forward: false, actions: 'read')]
     public function actionRead(?int $id = null): void
     {
@@ -46,11 +62,14 @@ final class CalculationPresenter extends Presenter
         } else {
             $data = [];
             try {
-                $limit = $this->getRequest()?->getParameter('limit');
-                $offset = $this->getRequest()?->getParameter('offset');
-                $limit = is_int($limit) ? $limit : CalculationRepository::LIMIT;
-                $offset = is_int($offset) ? $offset : CalculationRepository::OFFSET;
-                $data = $this->calculationFacade->getList($limit, $offset);
+                $page = $this->getParameter('page', 1);
+                $page = max(1, is_numeric($page) ? (int)$page : 1);
+                $limit = $this->getParameter('limit', CalculationRepository::LIMIT);
+                $limit = min(
+                    CalculationRepository::MAX_LIMIT,
+                    is_numeric($limit) ? (int)$limit : CalculationRepository::LIMIT
+                );
+                $data = $this->calculationFacade->getList($page, $limit);
             } catch (\Throwable $ex) {
                 Debugger::log($ex->getMessage(), Debugger::ERROR);
                 $this->getHttpResponse()->setCode(Response::S500_InternalServerError);
@@ -60,6 +79,9 @@ final class CalculationPresenter extends Presenter
         }
     }
 
+    /**
+     * @return void
+     */
     #[Requires(methods: 'POST', forward: false, actions: 'create')]
     public function actionCreate(): void
     {
@@ -88,6 +110,10 @@ final class CalculationPresenter extends Presenter
         $this->error('Create Calculation failed', IResponse::S400_BadRequest);
     }
 
+    /**
+     * @param int $id
+     * @return void
+     */
     #[Requires(methods: 'PUT', forward: false, actions: 'update')]
     public function actionUpdate(int $id): void
     {
