@@ -1,8 +1,6 @@
 <?php
+
 declare(strict_types=1);
-/**
- * @author David Koníček
- */
 
 namespace App\Model\Calculation;
 
@@ -17,7 +15,7 @@ final class CalculationDataValidator
      */
     public function validate(string $json): CalculationSchema
     {
-        $schema = Expect::from(new CalculationSchema);
+        $schema = Expect::from(new CalculationSchema());
         $data = \json_decode($json, true);
         $calculationData = (new Processor())->process($schema, $data);
         if ($calculationData instanceof CalculationSchema) {

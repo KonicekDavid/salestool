@@ -1,17 +1,11 @@
 <?php
 
 declare(strict_types=1);
-/**
- * @author David Koníček
- */
 
 namespace App\Model\Calculation;
 
-use Dibi\Result;
-
 interface CalculationRepositoryInterface
 {
-
     public function insert(Calculation $calculation): ?Calculation;
 
     public function update(Calculation $calculation): ?Calculation;

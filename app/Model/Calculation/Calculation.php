@@ -1,13 +1,8 @@
 <?php
 
 declare(strict_types=1);
-/**
- * @author David Koníček
- */
 
 namespace App\Model\Calculation;
-
-use Dibi\Row;
 
 /**
  * Calculation class
@@ -244,10 +239,12 @@ final class Calculation
     public function map(array $data): void
     {
         $id = isset($data['id']) && is_numeric($data['id']) ? (int)$data['id'] : null;
-        $customerName = isset($data['customer_name']) && is_string($data['customer_name'])? $data['customer_name'] : null;
+        $customerName = isset($data['customer_name']) && is_string(
+            $data['customer_name']
+        ) ? $data['customer_name'] : null;
         $tariffName = isset($data['tariff_name']) && is_string($data['tariff_name']) ? $data['tariff_name'] : null;
         $price = isset($data['price']) && is_numeric($data['price']) ? (float)$data['price'] : null;
-        $currency = isset($data['currency']) && is_string($data['currency'])? $data['currency'] : null;
+        $currency = isset($data['currency']) && is_string($data['currency']) ? $data['currency'] : null;
         $status = isset($data['status']) && is_string($data['status']) ? $data['status'] : null;
         $createdAt = isset($data['created_at']) && is_string($data['created_at']) ? $data['created_at'] : null;
         $lastUpdate = isset($data['last_update']) && is_string($data['last_update']) ? $data['last_update'] : null;

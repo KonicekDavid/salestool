@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * @author David Koníček
- */
-
 namespace App\Model\Calculation;
 
 enum CalculationStatus: string
