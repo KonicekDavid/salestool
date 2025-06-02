@@ -9,25 +9,28 @@ use Nette;
 use Nette\Application\Routers\RouteList;
 
 
+/**
+ * RouterFactory
+ */
 final class RouterFactory
 {
     use Nette\StaticClass;
 
+    /**
+     * @return RouteList
+     */
     public static function createRouter(): RouteList
     {
-        $router = new RouteList;
-
-        $apiModule = new RouteList('Api');
-        $apiModule[] = new ApiRoute('/api/offers[/<id>]', 'Offer', [
+        $router = new RouteList('Api');
+        $route = new ApiRoute('/api/v1/calculations[/<id>]', 'Calculation', [
             'methods' => [
-                'GET'  => 'default',
-                'POST' => 'default',
-                'PUT'  => 'default'
-            ],
+                'GET'  => 'read',
+                'POST' => 'create',
+                'PUT'  => 'update'
+            ]
         ]);
-
-        $router[] = $apiModule;
-
+        $route->setAutoBasePath(false);
+        $router[] = $route;
         return $router;
     }
 }

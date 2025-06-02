@@ -2,10 +2,13 @@ FROM php:8.2-fpm
 
 WORKDIR /var/www/salestool
 
+ENV TZ=Europe/Prague
+
 RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     sqlite3 \
     unzip \
+    tzdata \
     git \
     && docker-php-ext-install pdo pdo_sqlite
 
