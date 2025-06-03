@@ -32,7 +32,7 @@ class CalculationFacade implements CalculationFacadeInterface
         $calculation = (new Calculation())
             ->setCustomerName($data->customer_name ?? '')
             ->setTariffName($data->tariff_name ?? '')
-            ->setPrice($data->price ?? 0)
+            ->setPrice($data->price)
             ->setCurrency($data->currency ?? '')
             ->setStatus(CalculationStatus::NEW->value);
 
@@ -69,18 +69,15 @@ class CalculationFacade implements CalculationFacadeInterface
      */
     public function getList(int $page, int $limit): array
     {
-        $offset = ($page - 1) * $limit;
         $total = $this->calculationRepository->getTotalCount();
         $pages = (int)ceil($total / $limit);
         $page = $page > $pages ? $pages : $page;
+        $offset = ($page - 1) * $limit;
 
         /** @var Calculation[] $data */
         $data = $this->cache->load('calculation' . $limit . '_' . $page, function () use ($limit, $offset) {
-            return $this->calculationRepository->getList($limit, $offset);
+            return $this->calculationRepository->getListOfArrays($limit, $offset);
         }, [Cache::Expire => '20 minutes', Cache::Tags => 'calculation.list']);
-        $data = array_map(function (Calculation $calculation) {
-            return $calculation->toArray();
-        }, $data);
         $result = [
             'data' => $data,
             'pagination' => [

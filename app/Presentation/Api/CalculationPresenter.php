@@ -35,14 +35,6 @@ final class CalculationPresenter extends Presenter
     public CalculationRepositoryInterface $calculationRepository;
 
     /**
-     * @return void
-     */
-    public function startup(): void
-    {
-        parent::startup();
-    }
-
-    /**
      * @param int|null $id
      * @return void
      */
@@ -62,8 +54,13 @@ final class CalculationPresenter extends Presenter
         } else {
             $data = [];
             try {
-                $page = $this->getParameter('page', 1);
-                $page = max(1, is_numeric($page) ? (int)$page : 1);
+                $page = $this->getParameter('page', CalculationRepository::PAGE);
+                $page = max(
+                    CalculationRepository::PAGE,
+                    is_numeric($page) ?
+                        (int)$page
+                        : CalculationRepository::PAGE
+                );
                 $limit = $this->getParameter('limit', CalculationRepository::LIMIT);
                 $limit = min(
                     CalculationRepository::MAX_LIMIT,
@@ -92,12 +89,11 @@ final class CalculationPresenter extends Presenter
         $calculation = null;
         try {
             $json = $this->getHttpRequest()->getRawBody() ?? '';
-            $calculationSchema = (new CalculationDataValidator())->validate($json);
+            $calculationSchema = (new CalculationDataValidator())->validateForCreate($json);
             $calculation = $this->calculationFacade->create($calculationSchema);
         } catch (\InvalidArgumentException $ex) {
-            Debugger::log($ex->getMessage(), Debugger::ERROR);
-            $this->getHttpResponse()->setCode(Response::S400_BadRequest, $ex->getMessage());
-            $this->terminate();
+            $this->getHttpResponse()->setCode(Response::S400_BadRequest);
+            $this->sendResponse(new JsonResponse(['error' => $ex->getMessage()]));
         } catch (\Throwable $ex) {
             Debugger::log($ex->getMessage(), Debugger::ERROR);
             $this->getHttpResponse()->setCode(Response::S500_InternalServerError);
@@ -123,16 +119,15 @@ final class CalculationPresenter extends Presenter
 
         try {
             $json = $this->getHttpRequest()->getRawBody() ?? '';
-            $calculationSchema = (new CalculationDataValidator())->validate($json);
+            $calculationSchema = (new CalculationDataValidator())->validateForUpdate($json);
             $calculation = $this->calculationRepository->getById($id);
             if (!$calculation) {
                 throw new BadRequestException('Calculation not found');
             }
             $updatedCalculation = $this->calculationFacade->update($calculation, $calculationSchema);
         } catch (\InvalidArgumentException $ex) {
-            Debugger::log($ex->getMessage(), Debugger::ERROR);
-            $this->getHttpResponse()->setCode(Response::S400_BadRequest, $ex->getMessage());
-            $this->terminate();
+            $this->getHttpResponse()->setCode(Response::S400_BadRequest);
+            $this->sendResponse(new JsonResponse(['error' => $ex->getMessage()]));
         } catch (\Throwable $ex) {
             Debugger::log($ex->getMessage(), Debugger::ERROR);
             $this->getHttpResponse()->setCode(Response::S500_InternalServerError);

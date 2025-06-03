@@ -21,4 +21,11 @@ interface CalculationRepositoryInterface
      * @throws \Dibi\Exception
      */
     public function getList(int $limit, int $offset): array;
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return array<mixed>
+     */
+    public function getListOfArrays(int $limit, int $offset): array;
 }

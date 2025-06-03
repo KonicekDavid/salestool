@@ -24,7 +24,8 @@
 		"symfony/thanks": "^1",
 		"phpstan/phpstan-nette": "^2.0",
 		"phpstan/extension-installer": "^1.4",
-		"squizlabs/php_codesniffer": "^3.13"
+		"squizlabs/php_codesniffer": "^3.13",
+		"mockery/mockery": "^1.6"
 	},
 	"autoload": {
 		"psr-4": {
@@ -40,6 +41,7 @@
 		}
 	},
 	"scripts": {
-		"analyse": "vendor/bin/phpstan analyse app -c config/phpstan.neon"
+		"analyse-app": "vendor/bin/phpstan analyse app -c config/phpstan.neon",
+		"tester": "php vendor/bin/tester ."
 	}
 }
