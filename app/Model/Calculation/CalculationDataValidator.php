@@ -13,14 +13,48 @@ final class CalculationDataValidator
      * @param string $json
      * @return CalculationSchema
      */
-    public function validate(string $json): CalculationSchema
+    public function validateForCreate(string $json): CalculationSchema
     {
-        $schema = Expect::from(new CalculationSchema());
-        $data = \json_decode($json, true);
-        $calculationData = (new Processor())->process($schema, $data);
-        if ($calculationData instanceof CalculationSchema) {
-            return $calculationData;
+        try {
+            $schema = Expect::from(new CalculationSchema(), [
+                'customer_name' => Expect::string()->min(2)->max(100)->required(),
+                'tariff_name' => Expect::string()->min(2)->max(150)->required(),
+                'price' => Expect::float()->min(0.00)->required(),
+                'currency' => Expect::string()->min(1)->max(10)->required(),
+            ]);
+            $data = \json_decode($json, true);
+            $calculationData = (new Processor())->process($schema, $data);
+            if ($calculationData instanceof CalculationSchema) {
+                return $calculationData;
+            }
+            throw new \RuntimeException('Internal error.');
+        } catch (\Throwable $exception) {
+            throw new \InvalidArgumentException($exception->getMessage());
         }
-        throw new \RuntimeException('Invalid calculation schema');
+    }
+
+    /**
+     * @param string $json
+     * @return CalculationSchema
+     */
+    public function validateForUpdate(string $json): CalculationSchema
+    {
+        try {
+            $schema = Expect::from(new CalculationSchema(), [
+                'status' => Expect::anyOf(
+                    CalculationStatus::ACCEPTED->value,
+                    CalculationStatus::PENDING->value,
+                    CalculationStatus::REJECTED->value
+                )->required()
+            ]);
+            $data = \json_decode($json, true);
+            $calculationData = (new Processor())->process($schema, $data);
+            if ($calculationData instanceof CalculationSchema) {
+                return $calculationData;
+            }
+            throw new \RuntimeException('Internal error.');
+        } catch (\Throwable $exception) {
+            throw new \InvalidArgumentException($exception->getMessage());
+        }
     }
 }

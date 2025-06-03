@@ -124,4 +124,21 @@ SQL;
         }
         return $results;
     }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return array<mixed>
+     * @throws \Dibi\Exception
+     */
+    public function getListOfArrays(int $limit, int $offset): array
+    {
+        $results = [];
+        $data = $this->getList($limit, $offset);
+        /** @var Calculation $calculation */
+        foreach ($data as $calculation) {
+            $results[] = $calculation->toArray();
+        }
+        return $results;
+    }
 }
