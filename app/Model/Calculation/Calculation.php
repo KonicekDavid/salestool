@@ -155,7 +155,7 @@ final class Calculation
     {
         $newStatus = CalculationStatus::tryFrom($status);
         if (!$newStatus) {
-            throw new \InvalidArgumentException("Invalid status");
+            throw new \InvalidArgumentException("Invalid status.");
         }
         $this->status = $status;
         return $this;
@@ -227,7 +227,7 @@ final class Calculation
             if ($price < 0) {
                 throw new \InvalidArgumentException('Price must be a positive number.');
             }
-            return round((float)$price, 0);
+            return round((float)$price, 2);
         }
         throw new \InvalidArgumentException('Invalid price format, must be a number.');
     }

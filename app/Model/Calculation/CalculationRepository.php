@@ -6,7 +6,6 @@ namespace App\Model\Calculation;
 
 use Dibi\Connection;
 use Dibi\Row;
-use http\Exception\InvalidArgumentException;
 
 class CalculationRepository implements CalculationRepositoryInterface
 {
