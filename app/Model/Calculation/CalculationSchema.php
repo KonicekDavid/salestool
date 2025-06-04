@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model\Calculation;
 
-class CalculationSchema
+/**
+ * CalculationSchema schema
+ */
+final class CalculationSchema
 {
     public int|null $id = null;
     public string|null $customer_name = null;
@@ -12,6 +15,4 @@ class CalculationSchema
     public float|null $price = null;
     public string|null $currency = null;
     public string|null $status = null;
-    public string|null $created_at = null;
-    public string|null $last_update = null;
 }

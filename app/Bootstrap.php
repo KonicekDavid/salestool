@@ -7,12 +7,24 @@ namespace App;
 use Nette;
 use Nette\Bootstrap\Configurator;
 
+/**
+ * Bootstrap class
+ */
 class Bootstrap
 {
+    /**
+     * @var Configurator
+     */
     private Configurator $configurator;
+    /**
+     * @var string
+     */
     private string $rootDir;
 
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->rootDir = dirname(__DIR__);
@@ -22,6 +34,9 @@ class Bootstrap
     }
 
 
+    /**
+     * @return Nette\DI\Container
+     */
     public function bootWebApplication(): Nette\DI\Container
     {
         $this->initializeEnvironment();
@@ -30,6 +45,9 @@ class Bootstrap
     }
 
 
+    /**
+     * @return void
+     */
     public function initializeEnvironment(): void
     {
         //$this->configurator->setDebugMode('secret@23.75.345.200'); // enable for your remote IP
@@ -41,6 +59,9 @@ class Bootstrap
     }
 
 
+    /**
+     * @return void
+     */
     private function setupContainer(): void
     {
         $configDir = $this->rootDir . '/config';

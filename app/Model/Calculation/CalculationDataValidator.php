@@ -7,6 +7,9 @@ namespace App\Model\Calculation;
 use Nette\Schema\Expect;
 use Nette\Schema\Processor;
 
+/**
+ * CalculationDataValidator class
+ */
 final class CalculationDataValidator
 {
     /**

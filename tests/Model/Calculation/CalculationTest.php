@@ -12,8 +12,14 @@ use Tester\TestCase;
 
 require __DIR__ . '/../../bootstrap.php';
 
+/**
+ * CalculationTest class
+ */
 class CalculationTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testMapAndToArray(): void
     {
         $calculation = new Calculation();
@@ -51,34 +57,57 @@ class CalculationTest extends TestCase
         Assert::same(CalculationValidity::VALID->value, $array['validity']);
     }
 
+    /**
+     * @return void
+     */
     public function testInvalidCurrencyThrowsException(): void
     {
         $calc = new Calculation();
-        Assert::exception(fn() => $calc->setCurrency('USD'),
+        Assert::exception(
+            fn() => $calc->setCurrency('USD'),
             \InvalidArgumentException::class,
-            "Invalid currency, must be " . Calculation::DEFAULT_CURRENCY . ".");
+            "Invalid currency, must be " . Calculation::DEFAULT_CURRENCY . "."
+        );
     }
 
+    /**
+     * @return void
+     */
     public function testInvalidStatusThrowsException(): void
     {
         $calc = new Calculation();
-        Assert::exception(fn() => $calc->setStatus('INVALID_STATUS'),
+        Assert::exception(
+            fn() => $calc->setStatus('INVALID_STATUS'),
             \InvalidArgumentException::class,
-            "Invalid status.");
+            "Invalid status."
+        );
     }
 
+    /**
+     * @return void
+     */
     public function testPriceThrowsException(): void
     {
         $calc = new Calculation();
-        Assert::exception(fn() => $calc->setPrice(-999), \InvalidArgumentException::class, 'Price must be a positive number.');
+        Assert::exception(
+            fn() => $calc->setPrice(-999),
+            \InvalidArgumentException::class,
+            'Price must be a positive number.'
+        );
 
         $calc = new Calculation();
-        Assert::exception(fn() => $calc->setPrice('test'), \InvalidArgumentException::class, 'Invalid price format, must be a number.');
+        Assert::exception(
+            fn() => $calc->setPrice('test'),
+            \InvalidArgumentException::class,
+            'Invalid price format, must be a number.'
+        );
     }
 
-    public function testCreate()
+    /**
+     * @return void
+     */
+    public function testGettersAndSetters(): void
     {
-        $date = (new \DateTime())->format('Y-m-d H:i:s');
         $name = 'Miroslav Novák';
         $tariffName = 'Na míru pro Míru';
         $status = CalculationStatus::NEW->value;
@@ -95,22 +124,6 @@ class CalculationTest extends TestCase
         Assert::same($status, $calculation->getStatus());
         Assert::same($price, $calculation->getPrice());
         Assert::same($currency, $calculation->getCurrency());
-
-        $data = [
-            'id'            => 2,
-            'customer_name' => $name,
-            'tariff_name'   => $tariffName,
-            'status'        => $status,
-            'price'         => $price,
-            'currency'      => $currency,
-            'created_at'    => $date,
-            'last_update'   => $date
-        ];
-
-        $newCalculation = new Calculation();
-        $newCalculation->map($data);
-        Assert::same(2, $newCalculation->getId());
-        Assert::equal(new \DateTimeImmutable($date), $newCalculation->getCreatedAt());
     }
 }
 

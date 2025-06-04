@@ -16,19 +16,25 @@ use Tracy\ILogger;
 #[Requires(forward: true)]
 final class Error5xxPresenter implements Nette\Application\IPresenter
 {
+    /**
+     * @param ILogger $logger
+     */
     public function __construct(
         private ILogger $logger,
     ) {
     }
 
 
+    /**
+     * @param Nette\Application\Request $request
+     * @return Nette\Application\Response
+     */
     public function run(Nette\Application\Request $request): Nette\Application\Response
     {
-        // Log the exception
+
         $exception = $request->getParameter('exception');
         $this->logger->log($exception, ILogger::EXCEPTION);
 
-        // Display a generic error message to the user
         return new Responses\CallbackResponse(
             function (Http\IRequest $httpRequest, Http\IResponse $httpResponse): void {
                 header('Content-Type: application/json');
