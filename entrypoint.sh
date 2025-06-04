@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+mkdir -p /var/www/salestool/temp
+mkdir -p /var/www/salestool/log
+
 chown -R www-data:www-data /var/www/salestool/temp /var/www/salestool/log || true
 chmod -R 777 /var/www/salestool/temp /var/www/salestool/log || true
 
