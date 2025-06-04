@@ -42,6 +42,7 @@
 	},
 	"scripts": {
 		"analyse-app": "vendor/bin/phpstan analyse app -c config/phpstan.neon",
-		"tester": "php vendor/bin/tester ."
+		"tester": "php vendor/bin/tester .",
+		"phpcs-12": "vendor/bin/phpcs app --standard=PSR12"
 	}
 }

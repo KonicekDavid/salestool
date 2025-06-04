@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * @author David Koníček
- */
 
 namespace tests\Model\Calculation;
 
@@ -15,8 +12,14 @@ use Tester\TestCase;
 
 require __DIR__ . '/../../bootstrap.php';
 
-class CalculationDataValidatorTest extends TestCase
+/**
+ * CalculationDataValidatorTest class
+ */
+final class CalculationDataValidatorTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testValidationForCreate()
     {
         $customerName = 'Miroslav Novák';
@@ -55,6 +58,9 @@ class CalculationDataValidatorTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testValidationForUpdate()
     {
         $status = CalculationStatus::REJECTED->value;

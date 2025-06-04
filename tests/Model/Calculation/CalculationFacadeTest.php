@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+namespace tests\Model\Calculation;
+
 use App\Model\Calculation\Calculation;
 use App\Model\Calculation\CalculationFacade;
 use App\Model\Calculation\CalculationRepositoryInterface;
 use App\Model\Calculation\CalculationSchema;
 use App\Model\Calculation\CalculationStatus;
+use Mockery;
 use Nette\Caching\Storages\DevNullStorage;
 use Tester\Assert;
 use Tester\TestCase;

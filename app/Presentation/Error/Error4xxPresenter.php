@@ -14,6 +14,10 @@ use Nette\Application\Responses\JsonResponse;
 #[Requires(methods: '*', forward: true)]
 final class Error4xxPresenter extends Nette\Application\UI\Presenter
 {
+    /**
+     * @param Nette\Application\BadRequestException $exception
+     * @return void
+     */
     public function renderDefault(Nette\Application\BadRequestException $exception): void
     {
         $response = new JsonResponse(['message' => 'Bad request.']);

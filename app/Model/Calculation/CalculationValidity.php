@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Calculation;
 
 /**
- * CalculationValidity class
+ * CalculationValidity enum
  */
 enum CalculationValidity: string
 {

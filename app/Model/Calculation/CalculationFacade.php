@@ -8,7 +8,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 
 /**
- *
+ * CalculationFacade class
  */
 class CalculationFacade implements CalculationFacadeInterface
 {
@@ -75,11 +75,16 @@ class CalculationFacade implements CalculationFacadeInterface
         $offset = ($page - 1) * $limit;
 
         /** @var Calculation[] $data */
-        $data = $this->cache->load('calculation' . $limit . '_' . $page, function () use ($limit, $offset) {
-            return $this->calculationRepository->getListOfArrays($limit, $offset);
-        }, [Cache::Expire => '20 minutes', Cache::Tags => 'calculation.list']);
+        $data = $this->cache->load(
+            sprintf('calculation_%s_%s', $limit, $page),
+            function () use ($limit, $offset) {
+                return $this->getListOfArrays($limit, $offset);
+            },
+            [Cache::Expire => '20 minutes', Cache::Tags => 'calculation.list']
+        );
+
         $result = [
-            'data' => $data,
+            'data'       => $data,
             'pagination' => [
                 'page'       => $page,
                 'limit'      => $limit,
@@ -106,5 +111,22 @@ class CalculationFacade implements CalculationFacadeInterface
         if ($newStatus === CalculationStatus::NEW && $newStatus !== $oldStatus) {
             throw new \InvalidArgumentException('Invalid status.');
         }
+    }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return array<mixed>
+     * @throws \Dibi\Exception
+     */
+    private function getListOfArrays(int $limit, int $offset): array
+    {
+        $results = [];
+        $data = $this->calculationRepository->getList($limit, $offset);
+        /** @var Calculation $calculation */
+        foreach ($data as $calculation) {
+            $results[] = $calculation->toArray();
+        }
+        return $results;
     }
 }

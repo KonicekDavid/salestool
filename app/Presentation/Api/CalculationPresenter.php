@@ -57,14 +57,14 @@ final class CalculationPresenter extends Presenter
                 $page = $this->getParameter('page', CalculationRepository::PAGE);
                 $page = max(
                     CalculationRepository::PAGE,
-                    is_numeric($page) ?
+                    \is_numeric($page) ?
                         (int)$page
                         : CalculationRepository::PAGE
                 );
                 $limit = $this->getParameter('limit', CalculationRepository::LIMIT);
                 $limit = min(
                     CalculationRepository::MAX_LIMIT,
-                    is_numeric($limit) ? (int)$limit : CalculationRepository::LIMIT
+                    \is_numeric($limit) ? (int)$limit : CalculationRepository::LIMIT
                 );
                 $data = $this->calculationFacade->getList($page, $limit);
             } catch (\Throwable $ex) {

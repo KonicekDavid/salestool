@@ -6,11 +6,13 @@ namespace App\Model\Calculation;
 
 use Dibi\Connection;
 use Dibi\Row;
-use http\Exception\InvalidArgumentException;
 
+/**
+ * CalculationRepository class
+ */
 class CalculationRepository implements CalculationRepositoryInterface
 {
-    const PAGE = 1;
+    public const PAGE = 1;
 
     public const LIMIT = 10;
 
@@ -121,23 +123,6 @@ SQL;
             $calculation = new Calculation();
             $calculation->map($row->toArray());
             $results[] = $calculation;
-        }
-        return $results;
-    }
-
-    /**
-     * @param int $limit
-     * @param int $offset
-     * @return array<mixed>
-     * @throws \Dibi\Exception
-     */
-    public function getListOfArrays(int $limit, int $offset): array
-    {
-        $results = [];
-        $data = $this->getList($limit, $offset);
-        /** @var Calculation $calculation */
-        foreach ($data as $calculation) {
-            $results[] = $calculation->toArray();
         }
         return $results;
     }
